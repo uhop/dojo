@@ -1,4 +1,4 @@
-define(["./kernel", "../has", "require", "../listen", "./sniff", "./Deferred", "./json", "./lang"], function(dojo, has, require, listen){
+define(["./kernel", "../has", "require", "../listen", "./sniff", "../has!config-promiseOnly?./promise:./Deferred", "./json", "./lang"], function(dojo, has, require, listen){
 	//	module:
 	//		dojo/_base.xhr
 	// summary:
