@@ -146,15 +146,6 @@ doh.register("tests._base.Deferred",
 			}
 			return null;
 		},
-		function errorHandler(t){
-			var def = new dojo.Deferred();
-			var handledError;
-			dojo.config.deferredOnError = function(e){
-				handledError = e;
-			};
-			def.reject(new Error("test"));
-			t.t(handledError instanceof Error);
-		},
 		function cancelThenDerivative(t){
 			var def = new dojo.Deferred();
 			var def2 = def.then();
