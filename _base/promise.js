@@ -244,7 +244,7 @@ define(["./kernel", "./lang", "../has!config-detectUnhandledPromises?../promise/
 				// summary:
 				//		Cancels the asynchronous operation
 				if(!fulfilled){
-					var error = canceller(deferred, reason);
+					var error = canceller(reason);
 					if(error === undefined){
 						error = new dojo.promise.CancelError;
 					}
