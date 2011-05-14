@@ -119,9 +119,9 @@ define(["./promise"], function(promise){
 			}else{
 				chainDeferred.resolve(result);
 			}
-		};
+		}
 	}
-	
+
 	// Implement compatible handling of return values, whilst not breaking progress updates
 	function transform(deferred, compatiblePromise){
 		var transformDeferred = new promise.Deferred(compatiblePromise.cancel);
