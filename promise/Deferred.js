@@ -1,4 +1,4 @@
-define(["../main", "../promise", "../has!config-detectUnhandledPromises?./promise/detectUnhandled"], function(dojo, _promise_, detectUnhandled){
+define(["../_base/kernel", "../promise", "../has!config-detectUnhandledPromises?./promise/detectUnhandled"], function(dojo, _promise_, detectUnhandled){
 	var freeze = Object.freeze || function(){};
 	
 	// A deferred provides an API for creating and resolving a promise.

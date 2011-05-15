@@ -1,4 +1,4 @@
-define(["./promise", "./promise/Deferred"], function(_promise_, Deferred){
+define(["./_base/kernel", "./promise", "./promise/Deferred"], function(dojo, _promise_, Deferred){
 	// Provide a Dojo <= 1.4 compatible implementation of Deferreds, based
 	// on dojo.promise.Deferred.
 	dojo.Deferred = function(canceller){
