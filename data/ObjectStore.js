@@ -1,4 +1,4 @@
-define(["../main", "../regexp"], function(dojo) {
+define(["../main", "../when", "../regexp"], function(dojo, when) {
 	// module:
 	//		dojo/data/ObjectStore
 	// summary:
@@ -123,7 +123,7 @@ dojo.declare("dojo.data.ObjectStore", null,{
 
 			var item;
 			if(typeof args.item.load === "function"){
-				dojo.when(args.item.load(), function(result){
+				when(args.item.load(), function(result){
 					item = result; // in synchronous mode this can allow loadItem to return the value
 					var func = result instanceof Error ? args.onError : args.onItem;
 					if(func){
@@ -166,8 +166,8 @@ dojo.declare("dojo.data.ObjectStore", null,{
 			}
 
 			var results = this.objectStore.query(query, args);
-			dojo.when(results.total, function(totalCount){
-				dojo.when(results, function(results){
+			when(results.total, function(totalCount){
+				when(results, function(results){
 					if(args.onBegin){
 						args.onBegin.call(scope, totalCount || results.length, args);
 					}
@@ -262,7 +262,7 @@ dojo.declare("dojo.data.ObjectStore", null,{
 			// summary:
 			//		fetch an item by its identity, by looking in our index of what we have loaded
 			var item;
-			dojo.when(this.objectStore.get(args.identity),
+			when(this.objectStore.get(args.identity),
 				function(result){
 					item = result;
 					args.onItem.call(args.scope, result);
@@ -420,7 +420,7 @@ dojo.declare("dojo.data.ObjectStore", null,{
 					}
 					savingObjects.push(dirty);
 					dirtyObjects.splice(i--,1);
-					dojo.when(result, function(value){
+					when(result, function(value){
 						if(!(--left)){
 							if(kwArgs.onComplete){
 								kwArgs.onComplete.call(kwArgs.scope, actions);

@@ -1,4 +1,4 @@
-define(["./promise"], function(promise){
+define(["./promise", "./promise/Deferred"], function(_promise_, Deferred){
 	// Provide a Dojo <= 1.4 compatible implementation of Deferreds, based
 	// on dojo.promise.Deferred.
 	dojo.Deferred = function(canceller){
@@ -7,7 +7,7 @@ define(["./promise"], function(promise){
 
 		var compatibleDeferred = this;
 		// Create the internal deferred with a compatible canceller.
-		var deferred = new promise.Deferred(function(){
+		var deferred = new Deferred(function(){
 			if(canceller){
 				var err = canceller(compatibleDeferred);
 				if(!(err instanceof Error)){
@@ -19,6 +19,8 @@ define(["./promise"], function(promise){
 					err = new Error(msg);
 					err.dojoType = "cancel";
 					err.cancelResult = res;
+				}else if(err instanceof _promise_.CancelError){
+					err.dojoType = "cancel";
 				}
 				return err;
 			}
@@ -77,14 +79,14 @@ define(["./promise"], function(promise){
 			return this.addCallbacks(enclosed, enclosed);
 		};
 	};
-	// Make sure we're a proper subclass of dojo.promise.Deferred
-	dojo.Deferred.prototype = new promise.Deferred;
+	// Make sure we're a proper subclass of dojo/promise/Deferred
+	dojo.Deferred.prototype = new Deferred;
 	dojo.Deferred.prototype.constructor = dojo.Deferred;
 	
 	// Sets up the callbacks to be invoked in the future, with their return values mutating
 	// the state of the deferred.
 	function chain(deferred, compatiblePromise, resolvedCallback, errorCallback){
-		var chainDeferred = new promise.Deferred(compatiblePromise.cancel);
+		var chainDeferred = new Deferred(compatiblePromise.cancel);
 		compatiblePromise.then(resback, resback);
 		return chainDeferred;
 
@@ -124,7 +126,7 @@ define(["./promise"], function(promise){
 
 	// Implement compatible handling of return values, whilst not breaking progress updates
 	function transform(deferred, compatiblePromise){
-		var transformDeferred = new promise.Deferred(compatiblePromise.cancel);
+		var transformDeferred = new Deferred(compatiblePromise.cancel);
 		compatiblePromise.then(
 				function(value){
 					if(value instanceof Error){

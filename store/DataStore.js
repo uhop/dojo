@@ -1,4 +1,4 @@
-define(["../main", "./util/QueryResults"], function(dojo) {
+define(["../main", "../promise/Deferred", "./util/QueryResults"], function(dojo, Deferred) {
 	// module:
 	//		dojo/store/DataStore
 	// summary:
@@ -37,7 +37,7 @@ dojo.declare("dojo.store.DataStore", null, {
 		// id: Object?
 		//		The identity to use to lookup the object
 		var returnedObject, returnedError;
-		var deferred = new dojo.Deferred();
+		var deferred = new Deferred();
 		this.store.fetchItemByIdentity({
 			identity: id,
 			onItem: this._objectConverter(function(object){
@@ -108,8 +108,8 @@ dojo.declare("dojo.store.DataStore", null, {
 		// returns: dojo.store.util.QueryResults
 		//		A query results object that can be used to iterate over results.
 		var returnedObject, returnedError, fetchHandle;
-		var deferred = new dojo.Deferred(function(){ fetchHandle.abort && fetchHandle.abort(); });
-		deferred.total = new dojo.Deferred();
+		var deferred = new Deferred(function(){ fetchHandle.abort && fetchHandle.abort(); });
+		deferred.total = new Deferred();
 		var converter = this._objectConverter(function(object){return object;});
 		fetchHandle = this.store.fetch(dojo.mixin({
 			query: query,

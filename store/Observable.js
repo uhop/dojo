@@ -1,4 +1,4 @@
-define(["../main"], function(dojo) {
+define(["../main", "../when"], function(dojo, when) {
 	// module:
 	//		dojo/store/Observable
 	// summary:
@@ -61,7 +61,7 @@ return dojo.store.Observable = function(store){
 				if(listeners.push(listener) == 1){
 					// first listener was added, create the query checker and updater
 					queryUpdaters.push(queryUpdater = function(changed, existingId){
-						dojo.when(results, function(resultsArray){
+						when(results, function(resultsArray){
 							var atEnd = resultsArray.length != options.count;
 							var i;
 							if(++queryRevision != revision){
@@ -141,7 +141,7 @@ return dojo.store.Observable = function(store){
 				}
 				inMethod = true;
 				try{
-					return dojo.when(original.apply(this, arguments), function(results){
+					return when(original.apply(this, arguments), function(results){
 						action((typeof results == "object" && results) || value);
 						return results;
 					});

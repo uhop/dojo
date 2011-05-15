@@ -1,4 +1,4 @@
-define(["./kernel", "../has", "require", "../listen", "./sniff", "../has!config-promiseOnly?./promise:./Deferred", "./json", "./lang"], function(dojo, has, require, listen){
+define(["./kernel", "../has", "require", "../listen", "../Deferred", "./sniff", "./json", "./lang"], function(dojo, has, require, listen, Deferred){
 	//	module:
 	//		dojo/_base.xhr
 	// summary:
@@ -572,7 +572,7 @@ define(["./kernel", "../has", "require", "../listen", "./sniff", "../has!config-
 
 		// .. and the real work of getting the deferred in order, etc.
 		ioArgs.handleAs = args.handleAs || "text";
-		var d = new _d.Deferred(canceller);
+		var d = new Deferred(canceller);
 		d.addCallbacks(okHandler, function(error){
 			return errHandler(error, d);
 		});

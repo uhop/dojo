@@ -1,4 +1,4 @@
-define(["../main"], function(dojo) {
+define(["../main", "../when"], function(dojo, when) {
 	// module:
 	//		dojo/store/Cache
 	// summary:
@@ -47,8 +47,8 @@ dojo.store.Cache = function(masterStore, cachingStore, /*dojo.store.__CacheArgs*
 		// look for a queryEngine in either store
 		queryEngine: masterStore.queryEngine || cachingStore.queryEngine,
 		get: function(id, directives){
-			return dojo.when(cachingStore.get(id), function(result){
-				return result || dojo.when(masterStore.get(id, directives), function(result){
+			return when(cachingStore.get(id), function(result){
+				return result || when(masterStore.get(id, directives), function(result){
 					if(result){
 						cachingStore.put(result, {id: id});
 					}
@@ -57,7 +57,7 @@ dojo.store.Cache = function(masterStore, cachingStore, /*dojo.store.__CacheArgs*
 			});
 		},
 		add: function(object, directives){
-            return dojo.when(masterStore.add(object, directives), function(result){
+            return when(masterStore.add(object, directives), function(result){
             	// now put result in cache
                 return cachingStore.add(typeof result == "object" ? result : object, directives);
             });
@@ -65,13 +65,13 @@ dojo.store.Cache = function(masterStore, cachingStore, /*dojo.store.__CacheArgs*
 		put: function(object, directives){
 			// first remove from the cache, so it is empty until we get a response from the master store
             cachingStore.remove((directives && directives.id) || this.getIdentity(object));
-            return dojo.when(masterStore.put(object, directives), function(result){
+            return when(masterStore.put(object, directives), function(result){
             	// now put result in cache
                 return cachingStore.put(typeof result == "object" ? result : object, directives);
             });
         },
 		remove: function(id, directives){
-            return dojo.when(masterStore.remove(id, directives), function(result){
+            return when(masterStore.remove(id, directives), function(result){
                 return cachingStore.remove(id, directives);
             });
         },

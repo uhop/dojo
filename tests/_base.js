@@ -6,7 +6,7 @@ define([
 	"dojo/tests/_base/lang",
 	"dojo/tests/_base/declare",
 	"dojo/tests/_base/connect",
-	"dojo/tests/_base/Deferred",
+	"dojo/tests/Deferred",
 	"dojo/tests/_base/json",
 	"dojo/tests/_base/object",
 	"dojo/has!host-browser?dojo/tests/_base/html",

@@ -1,32 +1,8 @@
-define(["./kernel", "./lang", "../has!config-detectUnhandledPromises?../promise/detectUnhandled"], function(require, dojo, detectUnhandled){
-	// module:
-	//		dojo/_base/promise
-	// summary:
-	//		This module defines dojo.Deferred and base dojo.promise.* classes.
-
+define(["../main", "../promise", "../has!config-detectUnhandledPromises?./promise/detectUnhandled"], function(dojo, _promise_, detectUnhandled){
 	var freeze = Object.freeze || function(){};
-
-	dojo.promise = {};
-	// Base Promise class, whos prototype can be extended to provide utility methods.
-	dojo.promise.Promise = function(/*Function?*/canceller){};
-	dojo.extend(dojo.promise.Promise, {
-		then: function(resolvedCallback, rejectCallback, progressCallback){}
-	});
-
-	// Make a proper subclass of Error
-	dojo.promise.CancelError = (function(){
-		var klass = function(message){
-			Error.apply(this, arguments);
-			this.message = message || "The deferred was cancelled.";
-		};
-		var proto = klass.prototype = new Error;
-		proto.constructor = klass;
-		proto.name = "CancelError";
-		return klass;
-	})();
-
+	
 	// A deferred provides an API for creating and resolving a promise.
-	dojo.Deferred = dojo.promise.Deferred = function(/*Function?*/canceller){
+	_promise_.Deferred = function(/*Function?*/canceller){
 	// summary:
 	//		Deferreds provide a generic means for encapsulating an asynchronous
 	//		operation and notifying users of the completion and result of the operation.
@@ -163,7 +139,7 @@ define(["./kernel", "./lang", "../has!config-detectUnhandledPromises?../promise/
 	//		handle the asynchronous case.
 		var result, fulfilled, isError, waiting = [], handled;
 		var deferred = this;
-		var promise = this.promise = new dojo.promise.Promise;
+		var promise = this.promise = new _promise_.Promise;
 
 		detectUnhandled && detectUnhandled.register(deferred);
 
@@ -222,7 +198,7 @@ define(["./kernel", "./lang", "../has!config-detectUnhandledPromises?../promise/
 			//		|		then(printResult, onError);
 			//		|	>44
 			//
-			var returnDeferred = new dojo.promise.Deferred(promise.cancel);
+			var returnDeferred = new _promise_.Deferred(promise.cancel);
 			var listener = {
 				resolved: resolvedCallback,
 				error: rejectCallback,
@@ -246,7 +222,7 @@ define(["./kernel", "./lang", "../has!config-detectUnhandledPromises?../promise/
 				if(!fulfilled){
 					var error = canceller(reason);
 					if(error === undefined){
-						error = new dojo.promise.CancelError;
+						error = new _promise_.CancelError;
 					}
 					if(!fulfilled){
 						reject(error);
@@ -307,40 +283,8 @@ define(["./kernel", "./lang", "../has!config-detectUnhandledPromises?../promise/
 	};
 
 	// Deferred is a subclass of Promise
-	dojo.promise.Deferred.prototype = new dojo.promise.Promise;
-	dojo.promise.Deferred.prototype.constructor = dojo.Deferred;
-
-	dojo.when = function(promiseOrValue, /*Function?*/resolvedCallback, /*Function?*/rejectCallback, /*Function?*/progressCallback){
-		// summary:
-		//		This provides normalization between normal synchronous values and
-		//		asynchronous promises, so you can interact with them in a common way
-		// example:
-		//		|	function printFirstAndList(items){
-		//		|		dojo.when(findFirst(items), console.log);
-		//		|		dojo.when(findLast(items), console.log);
-		//		|	}
-		//		|	function findFirst(items){
-		//		|		return dojo.when(items, function(items){
-		//		|			return items[0];
-		//		|		});
-		//		|	}
-		//		|	function findLast(items){
-		//		|		return dojo.when(items, function(items){
-		//		|			return items[items.length];
-		//		|		});
-		//		|	}
-		//		And now all three of his functions can be used sync or async.
-		//		|	printFirstAndLast([1,2,3,4]) will work just as well as
-		//		|	printFirstAndLast(dojo.xhrGet(...));
-
-		if(promiseOrValue && typeof promiseOrValue.then === "function"){
-			return promiseOrValue.then(resolvedCallback, rejectCallback, progressCallback);
-		}else{
-			var deferred = new dojo.promise.Deferred;
-			deferred.resolve(promiseOrValue);
-			return deferred.then(resolvedCallback, rejectCallback, progressCallback);
-		}
-	};
-
-	return dojo.promise;
+	_promise_.Deferred.prototype = new _promise_.Promise;
+	_promise_.Deferred.prototype.constructor = _promise_.Deferred;
+	
+	return dojo.Deferred = _promise_.Deferred;
 });

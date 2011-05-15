@@ -8,7 +8,8 @@ define([
 	"./_base/array",
 	"./_base/declare",
 	//"./_base/connect", // until we decide if connect is going back into non-browser environments
-	"./has!config-promiseOnly?./_base/promise:./_base/Deferred",
+	// "./has!config-promiseOnly?./promise/Deferred:./Deferred", // Broke test runner, no idea why
+	"./Deferred",
 	"./_base/json",
 	"./_base/Color",
 	"./has!dojo-firebug?./_firebug/firebug",

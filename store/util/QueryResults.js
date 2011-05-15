@@ -1,4 +1,4 @@
-define(["../../_base/kernel", "../../_base/lang", "../../_base/Deferred"], function(dojo) {
+define(["../../_base/kernel", "../../when", "../../_base/lang"], function(dojo, when) {
   //  module:
   //    dojo/store/util/QueryResults
   //  summary:
@@ -41,7 +41,7 @@ dojo.store.util.QueryResults = function(results){
 		if(!results[method]){
 			results[method] = function(){
 				var args = arguments;
-				return dojo.when(results, function(results){
+				return when(results, function(results){
 					Array.prototype.unshift.call(args, results);
 					return dojo.store.util.QueryResults(dojo[method].apply(dojo, args));
 				});
@@ -52,7 +52,7 @@ dojo.store.util.QueryResults = function(results){
 	addIterativeMethod("filter");
 	addIterativeMethod("map");
 	if(!results.total){
-		results.total = dojo.when(results, function(results){
+		results.total = when(results, function(results){
 			return results.length;
 		});
 	}
