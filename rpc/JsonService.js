@@ -1,4 +1,4 @@
-define(["../main", "./RpcService"], function(dojo) {
+define(["../main", "../has!config-promiseOnly?../promise/Deferred:../Deferred", "./RpcService"], function(dojo, Deferred) {
 	// module:
 	//		dojo/rpc/JsonService
 	// summary:
@@ -19,7 +19,7 @@ dojo.declare("dojo.rpc.JsonService", dojo.rpc.RpcService, {
 			//	params: array
 			//		array of parameters to pass to method
 
-			var deferred = new dojo.Deferred();
+			var deferred = new Deferred();
 			this.bind(method, params, deferred);
 			return deferred;
 		},

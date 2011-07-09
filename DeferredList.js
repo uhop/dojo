@@ -1,4 +1,4 @@
-define(["./_base/kernel", "./_base/Deferred", "./_base/array"], function(dojo) {
+define(["./_base/kernel", "./Deferred", "./_base/array"], function(dojo, Deferred) {
 	// module:
 	//		dojo/DeferredList
 	// summary:
@@ -25,7 +25,7 @@ dojo.DeferredList = function(/*Array*/ list, /*Boolean?*/ fireOnOneCallback, /*B
 	//	canceller:
 	//		A deferred canceller function, see dojo.Deferred
 	var resultList = [];
-	dojo.Deferred.call(this);
+	Deferred.call(this);
 	var self = this;
 	if(list.length === 0 && !fireOnOneCallback){
 		this.resolve([0, []]);
@@ -59,7 +59,7 @@ dojo.DeferredList = function(/*Array*/ list, /*Boolean?*/ fireOnOneCallback, /*B
 		}
 	});
 };
-dojo.DeferredList.prototype = new dojo.Deferred();
+dojo.DeferredList.prototype = new Deferred();
 
 dojo.DeferredList.prototype.gatherResults = function(deferredList){
 	// summary:

@@ -1,4 +1,4 @@
-define(["../../_base/kernel", "../../_base/lang", "../../_base/Deferred"], function(dojo) {
+define(["../../_base/kernel", "../../_base/lang", "../../when"], function(dojo) {
   //  module:
   //    dojo/store/util/QueryResults
   //  summary:

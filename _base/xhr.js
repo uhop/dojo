@@ -1,4 +1,4 @@
-define(["./kernel", "./sniff", "require", "../on", "../io-query", "../dom-form", "./Deferred", "./json", "./lang"], function(dojo, has, require, on, ioq, domForm){
+define(["./kernel", "./sniff", "require", "../on", "../io-query", "../dom-form", "../Deferred", "./json", "./lang"], function(dojo, has, require, on, ioq, domForm, Deferred){
 	//	module:
 	//		dojo/_base.xhr
 	// summary:
@@ -380,7 +380,7 @@ define(["./kernel", "./sniff", "require", "../on", "../io-query", "../dom-form",
 
 		// .. and the real work of getting the deferred in order, etc.
 		ioArgs.handleAs = args.handleAs || "text";
-		var d = new _d.Deferred(canceller);
+		var d = new Deferred(canceller);
 		d.addCallbacks(okHandler, function(error){
 			return errHandler(error, d);
 		});

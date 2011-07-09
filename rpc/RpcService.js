@@ -1,4 +1,4 @@
-define(["../main", "../_base/url"], function(dojo) {
+define(["../main", "../has!config-promiseOnly?../promise/Deferred:../Deferred", "../_base/url"], function(dojo, Deferred) {
 	// module:
 	//		dojo/rpc/RpcService
 	// summary:
@@ -127,7 +127,7 @@ dojo.declare("dojo.rpc.RpcService", null, {
 		//		the service url for this call
 
 		return dojo.hitch(this, function(){
-			var deferredRequestHandler = new dojo.Deferred();
+			var deferredRequestHandler = new Deferred();
 
 			// if params weren't specified, then we can assume it's varargs
 			if( (this.strictArgChecks) &&
