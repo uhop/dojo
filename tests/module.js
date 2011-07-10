@@ -1,6 +1,7 @@
 define([
 	"dojo/tests/_base",
 	"dojo/tests/Deferred",
+	"dojo/tests/when",
 	"dojo/tests/cache",
 	"dojo/tests/i18n",
 	"dojo/tests/cldr",
