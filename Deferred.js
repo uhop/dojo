@@ -27,6 +27,8 @@ define([
 					err.dojoType = "cancel";
 				}
 				return err;
+			}else{
+				compatibleDeferred.silentlyCancelled = true;
 			}
 		});
 		// Transform the promise of the internal deferred to handle returned Error instances,
