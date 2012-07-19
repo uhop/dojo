@@ -3,7 +3,7 @@ define([
 	"./_base/lang",
 	"./errors/CancelError",
 	"./promise/Promise",
-	"./has!config-deferredInstrumentation?./promise/_instrumentation"
+	"./has!config-deferredInstrumentation?./promise/instrumentation"
 ], function(has, lang, CancelError, Promise, instrumentation){
 	"use strict";
 
