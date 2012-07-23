@@ -65,19 +65,11 @@ define([
 		};
 	};
 
+	var actionMap = {PROGRESS: "progress", RESOLVED: "resolved", REJECTED: "rejected"};
 	var signalDeferred = function(deferred, type, result){
 		if(!deferred.isCanceled()){
-			switch(type){
-				case PROGRESS:
-					deferred.progress(result);
-					break;
-				case RESOLVED:
-					deferred.resolve(result);
-					break;
-				case REJECTED:
-					deferred.reject(result);
-					break;
-			}
+			deferred[actionMap[type]](result);
+			// actionMap[type] && deferred[actionMap[type]](result);
 		}
 	};
 
@@ -123,7 +115,7 @@ define([
 			// summary:
 			//		Checks whether the deferred has been resolved or rejected.
 			// returns: Boolean
-			return !!fulfilled;
+			return fulfilled; // isn't truthy value enough?
 		};
 
 		this.isCanceled = promise.isCanceled = function(){
@@ -146,11 +138,11 @@ define([
 			if(!fulfilled){
 				signalWaiting(waiting, PROGRESS, update, null, deferred);
 				return promise;
-			}else if(strict === true){
-				throw new Error(FULFILLED_ERROR_MESSAGE);
-			}else{
-				return promise;
 			}
+			if(strict){	// truthy value should be enough
+				throw new Error(FULFILLED_ERROR_MESSAGE);
+			}
+			return promise;
 		};
 
 		this.resolve = function(value, /*Boolean?*/ strict){
@@ -169,11 +161,11 @@ define([
 				signalWaiting(waiting, fulfilled = RESOLVED, result = value, null, deferred);
 				waiting = null;
 				return promise;
-			}else if(strict === true){
-				throw new Error(FULFILLED_ERROR_MESSAGE);
-			}else{
-				return promise;
 			}
+			if(strict){	// truthy value should be enough
+				throw new Error(FULFILLED_ERROR_MESSAGE);
+			}
+			return promise;
 		};
 
 		var reject = this.reject = function(error, /*Boolean?*/ strict){
@@ -193,11 +185,11 @@ define([
 				signalWaiting(waiting, fulfilled = REJECTED, result = error, rejection, deferred);
 				waiting = null;
 				return promise;
-			}else if(strict === true){
-				throw new Error(FULFILLED_ERROR_MESSAGE);
-			}else{
-				return promise;
 			}
+			if(strict){	// truthy value should be enough
+				throw new Error(FULFILLED_ERROR_MESSAGE);
+			}
+			return promise;
 		};
 
 		this.then = promise.then = function(/*Function?*/ callback, /*Function?*/ errback, /*Function?*/ progback){
@@ -224,6 +216,13 @@ define([
 				signalListener(listener, fulfilled, result, rejection);
 			}else{
 				waiting.push(listener);
+				// the line above is a memory leak
+				// majority return values from then() are dropped and never used
+				// yet Deferred is created (this whole file is a huge constructor),
+				// then added to a long-living object "waiting" =>
+				// I dropped the result yet it is not going to be GC-ed
+				// until this Deferred is resolved => this is a memory leak
+				// and we will spend CPU later resolving unncessary object
 			}
 			return listener.deferred.promise;
 		};
@@ -249,17 +248,18 @@ define([
 					reason = typeof returnedReason === "undefined" ? reason : returnedReason;
 				}
 				canceled = true;
-				if(!fulfilled){
+				if(!fulfilled){ // do we really need this 2nd check? does canceler() can flip "fulfilled"?
 					// Allow canceler to provide its own reason, but fall back to a CancelError
 					if(typeof reason === "undefined"){
 						reason = new CancelError();
 					}
 					reject(reason);
 					return reason;
-				}else if(fulfilled === REJECTED && result === reason){
+				}
+				if(fulfilled === REJECTED && result === reason){
 					return reason;
 				}
-			}else if(strict === true){
+			}else if(strict){	// truthy value should be enough
 				throw new Error(FULFILLED_ERROR_MESSAGE);
 			}
 		};

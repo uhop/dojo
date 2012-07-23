@@ -28,7 +28,7 @@ define([
 		}else if(objectOrArray && typeof objectOrArray === "object"){
 			array = [];
 			for(var key in objectOrArray){
-				if(Object.hasOwnProperty.call(objectOrArray, key)){
+				if(objectOrArray.hasOwnProperty(key)){
 					array.push(objectOrArray[key]);
 				}
 			}

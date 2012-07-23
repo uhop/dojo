@@ -26,7 +26,7 @@ define([
 	function emitAsync(args){
 		setTimeout(function(){
 			emit.apply(evented, args);
-		}, 0);
+		}, 0); // not really 0ms, nope
 	}
 
 	Promise.prototype.trace = function(){

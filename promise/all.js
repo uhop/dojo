@@ -36,7 +36,7 @@ define([
 		if(object){
 			array = [];
 			for(var key in object){
-				if(Object.hasOwnProperty.call(object, key)){
+				if(object.hasOwnProperty(key)){
 					keyLookup.push(key);
 					array.push(object[key]);
 				}
@@ -55,6 +55,7 @@ define([
 			results = keyLookup = null;
 		});
 		var waiting = array.length;
+		// some?
 		some(array, function(valueOrPromise, index){
 			if(!object){
 				keyLookup.push(index);
@@ -62,7 +63,7 @@ define([
 			when(valueOrPromise, function(value){
 				if(!deferred.isFulfilled()){
 					results[keyLookup[index]] = value;
-					if(--waiting === 0){
+					if(!--waiting){
 						deferred.resolve(results);
 					}
 				}
